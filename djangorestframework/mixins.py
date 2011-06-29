@@ -226,7 +226,8 @@ class ResponseMixin(object):
 
     _ACCEPT_QUERY_PARAM = '_accept'        # Allow override of Accept header in URL query params
     _IGNORE_IE_ACCEPT_HEADER = True
-
+    _ETAG = None
+    
     """
     The set of response renderers that the view can handle.
     
@@ -262,6 +263,8 @@ class ResponseMixin(object):
 
         # Build the HTTP Response
         resp = HttpResponse(content, mimetype=response.media_type, status=response.status)
+        if self._ETAG:
+            resp['Etag'] = self._ETAG
         for (key, val) in response.headers.items():
             resp[key] = val
 
